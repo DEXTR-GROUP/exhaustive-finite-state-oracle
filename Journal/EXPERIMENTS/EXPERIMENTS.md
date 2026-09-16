@@ -4,7 +4,7 @@
 
 | ID | Проверка | Статус |
 |---|---|---|
-| — | Проверки ещё не начаты | PLANNED |
+| FM0-FM3-001 | Первый исполняемый structural qualification contour: formal boundary, independence, finite-state model, exact structural properties | PASS |
 
 ## Правила реестра
 
@@ -24,5 +24,9 @@ RUNNING
    ├── FAIL
    └── INCONCLUSIVE
 ```
+
+## Последнее состояние
+
+`FM0-FM3-001` подтверждает только первый structural baseline. Numerical qualification R4–R7/NumPy float64 и полноценная exhaustive enumeration ещё не закрыты.
 
 Новые проверки добавляются только после определения вопроса, конечного пространства и критерия завершения.

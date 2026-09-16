@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Exhaustive R4 numerical conformance against an external witness.
+"""Exhaustive R4 numerical conformance against an external-origin witness.
 
-The external QWENRNS oracle is executed only by this validation harness.
-It is not imported by EFSO runtime code.
+The witness is a pinned snapshot copied from QWENRNS. It is executed only by
+this validation harness and is never imported by EFSO runtime code.
 """
 
 from __future__ import annotations
@@ -23,6 +23,7 @@ from efso_r4_space import enumerate_r4_space
 
 EXPECTED_COUNT = 59049
 TOLERANCE = 1e-12
+LOCAL_WITNESS = ROOT / "validation" / "witnesses" / "r4_attention_batch_oracle.py"
 
 
 def as_payload(state) -> dict[str, object]:
@@ -33,14 +34,20 @@ def as_payload(state) -> dict[str, object]:
     }
 
 
-def main() -> None:
+def resolve_witness() -> Path:
     witness_root = os.environ.get("QWENRNS_ROOT")
-    if not witness_root:
-        raise SystemExit("QWENRNS_ROOT is required for external R4 qualification")
+    if witness_root:
+        candidate = Path(witness_root) / "validation" / "r4_attention_batch_oracle.py"
+        if candidate.is_file():
+            return candidate
+        raise SystemExit(f"external oracle not found: {candidate}")
+    if LOCAL_WITNESS.is_file():
+        return LOCAL_WITNESS
+    raise SystemExit(f"external-origin witness not found: {LOCAL_WITNESS}")
 
-    oracle = Path(witness_root) / "validation" / "r4_attention_batch_oracle.py"
-    if not oracle.is_file():
-        raise SystemExit(f"external oracle not found: {oracle}")
+
+def main() -> None:
+    oracle = resolve_witness()
 
     states = enumerate_r4_space()
     if len(states) != EXPECTED_COUNT:
@@ -101,6 +108,7 @@ def main() -> None:
         "state_digest": state_digest,
         "qualification": "PASS" if mismatch_count == 0 else "FAIL",
         "external_oracle_path": str(oracle),
+        "witness_mode": "external-origin-pinned-snapshot" if oracle == LOCAL_WITNESS else "external-repository",
         "source_commit": os.environ.get("GITHUB_SHA", "UNKNOWN"),
     }
 

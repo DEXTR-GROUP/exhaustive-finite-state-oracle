@@ -10,7 +10,9 @@
 | FM2-R4-002 | Корректное соответствие формы конечного R4-space независимой Attention semantics | PASS |
 | R4-NUM-001 | Exhaustive numerical conformance EFSO R4 evaluator ↔ independent QWENRNS batch oracle | PASS |
 | E5-001 | Independent deterministic transition engine | PASS |
-| E6-001 | Qualification of generic exhaustive conformance contour on full R4 finite space | RUNNING |
+| E6-001 | Qualification of generic exhaustive conformance contour on full R4 finite space | PASS |
+| E7-001 | Independent exhaustive invariant engine qualification | PASS |
+| E8-001 | Independent deterministic counterexample extraction and minimization engine | RUNNING |
 
 ## Правила реестра
 
@@ -33,10 +35,10 @@ RUNNING
 
 ## Последнее состояние
 
-`FM0-FM3-001`, `FM2-R4-001`, `E4-001`, `FM2-R4-002`, `R4-NUM-001` и `E5-001` подтверждены в пределах своих заявленных scopes. `R4-NUM-001` закрывает полный numerical contour из `59049` состояний без mismatches. `E5-001` закрывает собственный independent transition engine.
+`FM0-FM3-001`, `FM2-R4-001`, `E4-001`, `FM2-R4-002`, `R4-NUM-001`, `E5-001`, `E6-001` и `E7-001` подтверждены в пределах своих заявленных scopes. `R4-NUM-001` закрывает полный numerical contour из `59049` состояний без mismatches. `E5-001` закрывает собственный independent transition engine. `E6-001` закрывает generic exhaustive conformance contour на полном R4 finite space. `E7-001` закрывает independent invariant engine на полном R4 finite space.
 
-`E6-001` квалифицирует общий exhaustive conformance comparator на полном R4 finite space. Это ещё не IUT-specific conformance claim.
+`E8-001` квалифицирует механизм извлечения и минимизации контрпримеров на детерминированном finite fixture. Его статус ожидает фактического CI evidence.
 
-`R5/R6/R7` numerical conformance, NumPy float64 и E7–E12 ещё не закрыты.
+`R5/R6/R7` numerical conformance, NumPy float64 и E9–E12 ещё не закрыты.
 
 Новые проверки добавляются только после определения вопроса, конечного пространства и критерия завершения.

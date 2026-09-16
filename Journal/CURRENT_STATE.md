@@ -1,13 +1,13 @@
 # EFSO — ТЕКУЩЕЕ СОСТОЯНИЕ
 
-**Идентификатор:** EFSO-STATE-012  
+**Идентификатор:** EFSO-STATE-013  
 **Статус:** В РАБОТЕ
 
 ## 1. Рабочая граница
 
 Реализация независимого `Exhaustive Finite-State Oracle` для исчерпывающей проверки явно определённых конечных пространств состояний и переходов.
 
-FM0–FM3, E4, R4 numerical qualification, E5, E6, E7, E8, E9, E10, E11 и E12 закрыты в пределах заявленных scopes. Текущая рабочая граница: R5 numerical qualification.
+FM0–FM3, E4, R4 numerical qualification, E5, E6, E7, E8, E9, E10, E11, E12 и R5 qualification закрыты в пределах заявленных scopes. Текущая рабочая граница: R6 numerical qualification.
 
 ## 2. Подтверждено
 
@@ -24,54 +24,64 @@ FM0–FM3, E4, R4 numerical qualification, E5, E6, E7, E8, E9, E10, E11 и E12 �
 - `E10-001 = PASS`: 7 adversarial finite spaces;
 - `E11-001 = PASS`: external witness bridge изолирован, mutation independence подтверждена;
 - `E12-001 = PASS`: два последовательных прогона полного evidence contour дали идентичные return codes, stdout/stderr digests и канонический evidence digest;
-- CI baseline `35048841379`, commit `a426212ac5a29ee3f94fa507b3fd9550bb53b1b4`, job `104644596946` завершён успешно; artifact `10428436038`, SHA-256 `12b5271373be5c0de3056ad9538871a36e6ddd8c0df7e1a0c7b4a3482b5f6079`.
+- `FM2-R5-001 = PASS`: конечное пространство gated MLP `3^7 = 2187`, уникальная и детерминированная enumeration;
+- `R5-NUM-001 = PASS`: `2187` состояний, `2187` external outputs, `mismatch_count = 0`, `max_abs_error = 0.0`, tolerance `1e-12`;
+- CI run `35052989511`, commit `b665bc99361fd83de3a00de05fb3849ecc5cd90b`, job `104657174952` завершён успешно;
+- artifact `efso-qualification-evidence`: ID `10429760824`, SHA-256 `ae7bccc89ac9f65d295efaefbd14b6114090dbff3eca686742ada3935ba7194f`.
 
-## 3. Реализовано для текущей точки R5
+## 3. R5 evidence
 
-- `src/efso_r5_space.py`: явное конечное пространство `3^7 = 2187`;
-- `src/efso_r5_evaluator.py`: независимый EFSO-side R5 evaluator;
-- `validation/witnesses/r5_mlp_batch_oracle.py`: immutable snapshot external-origin QWENRNS witness;
-- `validation/witnesses/R5_WITNESS_MANIFEST.json`: provenance source commit + source Git blob SHA;
-- `validation/fm2_r5_001_evidence.py`: структурное evidence конечного пространства;
-- `validation/r5_numerical_conformance.py`: exhaustive state-by-state comparison с fixed tolerance `1e-12` и проверкой provenance snapshot;
-- CI больше не делает checkout приватного QWENRNS. R4 и R5 qualification используют pinned local witness snapshots.
+Machine-readable evidence `r5_numerical_conformance.json` содержит:
 
-## 4. Текущая инфраструктурная причина изменения
+```text
+expected_count          = 2187
+external_count          = 2187
+mismatch_count          = 0
+max_abs_error           = 0.0
+tolerance               = 1e-12
+state_digest            = 3b7160fb67886cf66df73e2ec762fa583c083eae791501fb2e1f98db7be32a69
+external_output_sha256  = c23145810c5569866272e0f35556c45ae30dbcfb137ff8285fbc12324dd677cc
+witness_source_blob_sha = 901125629523f473a597c9eeebdb8b6cb26a41d7
+witness_source_commit   = 4db6a1d314a1d0becb63995927feb90f301eb20e
+witness_snapshot_sha256 = 89c1326981b59a9af4a3ddd0571bac0bf3d639a3e8db1331a53d0362ff654a6c
+qualification           = PASS
+```
 
-Предыдущая схема CI пыталась выполнять `actions/checkout` для приватного `DEXTR-GROUP/QWENRNS`. Runner возвращал `Repository not found`. `ref: main` устранил только разрешение default branch и подтвердил фактический блокирующий уровень: отсутствие доступа runner к приватному repository.
+R5 numerical qualification использует immutable external-origin snapshot. Runtime-доступ CI к исходному QWENRNS repository отсутствует и не требуется.
+
+## 4. Инфраструктурное решение
+
+Предыдущая схема CI пыталась выполнять `actions/checkout` для приватного `DEXTR-GROUP/QWENRNS`. Runner возвращал `Repository not found`. После этого внешний witness был зафиксирован локальным source-exact snapshot с проверкой исходного Git blob SHA.
 
 Замена QWENRNS другим oracle не выполнялась. External-origin identity сохранена через pinned snapshot и provenance verification.
 
 ## 5. Незавершено
 
-- закрытие `FM2-R5-001` по CI evidence;
-- закрытие `R5-NUM-001` по фактическому CI evidence;
-- R6 numerical qualification;
-- R7 numerical qualification;
+- `R6-NUM-001`;
+- `R7-NUM-001`;
 - NumPy float64 qualification.
 
 ## 6. Текущая контрольная точка
 
 ```text
-FM2-R5-001 = RUNNING
-R5-NUM-001 = RUNNING
+R6-NUM-001 = NEXT
 ```
 
-## 7. Условия закрытия R5-NUM-001
+## 7. Условия следующего этапа
+
+Для R6 требуется до numerical comparison отдельно зафиксировать:
 
 ```text
-explicit finite R5 state space
-independent EFSO R5 evaluator
-external-origin pinned witness snapshot
-verified source provenance
+explicit finite R6 state space
+independent EFSO R6 evaluator
+external-origin witness provenance
 exhaustive enumeration of the declared space
-actual result count == expected cardinality
-mismatch_count == 0
-max_abs_error <= 1e-12
+fixed comparison tolerance
 machine-readable evidence
-CI success
-artifact uploaded
+CI reproducibility
 ```
+
+Только после structural qualification конечного пространства допускается numerical conformance.
 
 ## 8. Текущее направление
 
@@ -98,11 +108,11 @@ E11 = PASS
       ↓
 E12 = PASS
       ↓
-FM2-R5-001 = RUNNING
+FM2-R5-001 = PASS
       ↓
-R5-NUM-001 = RUNNING
+R5-NUM-001 = PASS
       ↓
-R6-NUM-001
+R6-NUM-001 = NEXT
       ↓
 R7-NUM-001
       ↓

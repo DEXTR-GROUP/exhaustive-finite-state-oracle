@@ -8,6 +8,7 @@
 | FM2-R4-001 | Первое конечное пространство R4: cardinality, canonical identity, exhaustive enumeration model | PASS |
 | E4-001 | Универсальный exhaustive enumerator: exact cardinality, uniqueness, duplicate detection, replay order | PASS |
 | FM2-R4-002 | Корректное соответствие формы конечного R4-space независимой Attention semantics | RUNNING |
+| R4-NUM-001 | Exhaustive numerical conformance EFSO R4 evaluator ↔ independent QWENRNS batch oracle | RUNNING |
 
 ## Правила реестра
 
@@ -30,7 +31,7 @@ RUNNING
 
 ## Последнее состояние
 
-`FM0-FM3-001`, `FM2-R4-001` и `E4-001` подтверждены в пределах их заявленных structural scopes. `E4-001` закрыт CI run #9 с machine-readable artifact. `FM2-R4-002` реализован и находится на CI verification; он проверяет корректную форму R4 finite-state space перед numerical conformance.
+`FM0-FM3-001`, `FM2-R4-001` и `E4-001` подтверждены в пределах их заявленных structural scopes. `E4-001` закрыт CI run #9 с machine-readable artifact. `FM2-R4-002` реализован и проверяется вместе с первым полным numerical R4 contour `R4-NUM-001`.
 
 `R4/R5/R6/R7` numerical conformance, NumPy float64 и E5–E12 ещё не закрыты.
 

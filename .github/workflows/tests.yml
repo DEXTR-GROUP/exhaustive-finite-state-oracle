@@ -18,9 +18,11 @@ jobs:
       - run: python -m pytest -q
       - name: Generate E4-001 evidence
         run: python validation/e4_001_evidence.py
-      - name: Upload E4-001 evidence
+      - name: Generate FM2-R4-002 evidence
+        run: python validation/fm2_r4_002_evidence.py
+      - name: Upload E4-001 and FM2-R4-002 evidence
         uses: actions/upload-artifact@v4
         with:
-          name: efso-e4-001-evidence
-          path: evidence/e4_001.json
+          name: efso-structural-evidence
+          path: evidence/*.json
           if-no-files-found: error

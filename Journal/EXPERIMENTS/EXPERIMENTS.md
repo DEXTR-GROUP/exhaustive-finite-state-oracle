@@ -5,6 +5,7 @@
 | ID | Проверка | Статус |
 |---|---|---|
 | FM0-FM3-001 | Первый исполняемый structural qualification contour: formal boundary, independence, finite-state model, exact structural properties | PASS |
+| FM2-R4-001 | Первое конечное пространство R4: cardinality, canonical identity, exhaustive enumeration model | PASS |
 
 ## Правила реестра
 
@@ -27,6 +28,6 @@ RUNNING
 
 ## Последнее состояние
 
-`FM0-FM3-001` подтверждает только первый structural baseline. Numerical qualification R4–R7/NumPy float64 и полноценная exhaustive enumeration ещё не закрыты.
+`FM0-FM3-001` и `FM2-R4-001` подтверждают structural baseline и конечную модель R4. Полное численное сравнение с внешним R4 reference, R5–R7, NumPy float64 и E4–E12 ещё не закрыты.
 
 Новые проверки добавляются только после определения вопроса, конечного пространства и критерия завершения.

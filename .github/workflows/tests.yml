@@ -14,6 +14,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: DEXTR-GROUP/QWENRNS
+          ref: main
           path: _witness/QWENRNS
           fetch-depth: 1
           sparse-checkout: |

@@ -17,8 +17,8 @@
 | E10-001 | Adversarial finite-space qualification | PASS |
 | E11-001 | External witness qualification bridge and mutation-independence boundary | PASS |
 | E12-001 | Reproducible verification harness | PASS |
-| FM2-R5-001 | Correct finite-state model for independent gated MLP qualification | RUNNING |
-| R5-NUM-001 | Exhaustive numerical conformance EFSO R5 evaluator ↔ independent QWENRNS batch oracle | RUNNING |
+| FM2-R5-001 | Correct finite-state model for independent gated MLP qualification | PASS |
+| R5-NUM-001 | Exhaustive numerical conformance EFSO R5 evaluator ↔ independent QWENRNS batch oracle | PASS |
 
 ## Правила реестра
 
@@ -43,8 +43,8 @@ RUNNING
 
 Все проверки `FM0-FM3-001` – `E12-001` подтверждены в пределах своих заявленных scopes. `R4-NUM-001` закрывает полный numerical contour из `59049` состояний без mismatches. `E11-001` закрывает изоляцию external witness bridge. `E12-001` закрывает воспроизводимость полного набора из десяти qualification commands.
 
-Текущий R5 contour состоит из отдельного finite-state model `FM2-R5-001` и numerical qualification `R5-NUM-001`. До фактического CI evidence оба остаются `RUNNING`.
+R5 contour также закрыт: `FM2-R5-001` подтверждает конечную модель `3^7 = 2187`, а `R5-NUM-001` подтверждает state-by-state numerical conformance на всех `2187` состояниях без mismatches при tolerance `1e-12`.
 
-`R6/R7` numerical conformance и NumPy float64 ещё не закрыты.
+Следующие незакрытые проверки: `R6-NUM-001`, `R7-NUM-001` и NumPy float64 qualification.
 
 Новые проверки добавляются только после определения вопроса, конечного пространства и критерия завершения.

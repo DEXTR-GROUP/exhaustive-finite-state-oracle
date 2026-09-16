@@ -47,11 +47,12 @@ def check_invariants(
     *,
     expected_count: int | None = None,
     state_id: Callable[[StateT], str] | None = None,
+    replay_factory: Callable[[], Iterable[StateT]] | None = None,
 ) -> InvariantReport[StateT]:
     """Exhaustively evaluate independent state invariants.
 
-    The engine does not know the implementation under test and only consumes
-    states plus explicit predicates supplied by the qualification protocol.
+    ``replay_factory`` is required to make the replay check meaningful. When
+    supplied, it must independently produce the same finite enumeration.
     """
     materialized = tuple(states)
     specs = tuple(invariants)
@@ -72,9 +73,11 @@ def check_invariants(
                     )
                 )
 
-    replay = tuple(identify(state) for state in materialized) == tuple(
-        identify(state) for state in materialized
-    )
+    if replay_factory is None:
+        replay = False
+    else:
+        replay_ids = tuple(identify(state) for state in replay_factory())
+        replay = tuple(identify(state) for state in materialized) == replay_ids
 
     report = InvariantReport(
         expected_count=expected,

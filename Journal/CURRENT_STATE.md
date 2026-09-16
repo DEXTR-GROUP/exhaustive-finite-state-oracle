@@ -1,115 +1,77 @@
 # EFSO — ТЕКУЩЕЕ СОСТОЯНИЕ
 
-**Идентификатор:** EFSO-STATE-006  
+**Идентификатор:** EFSO-STATE-007  
 **Статус:** В РАБОТЕ
 
 ## 1. Рабочая граница
 
 Реализация независимого `Exhaustive Finite-State Oracle` для исчерпывающей проверки явно определённых конечных пространств состояний и переходов.
 
-FM0–FM3 structural baseline и E4 exhaustive enumerator закрыты. R4 structural model реализована. Текущая рабочая граница — полная numerical qualification R4 на конечном пространстве `3^10 = 59049`.
+FM0–FM3 structural baseline, E4 exhaustive enumerator и R4 numerical qualification закрыты в пределах заявленных scopes. Текущая рабочая граница — квалификация собственного independent transition engine E5.
 
 ## 2. Подтверждено
 
 - `FM0-FM3-001 = PASS`;
 - `FM2-R4-001 = PASS` только в пределах исторического structural placeholder scope;
 - `E4-001 = PASS`;
-- E4 CI run #9: `35044801336`;
-- E4 artifact: `efso-e4-001-evidence`, artifact `10425614571`;
-- E4 digest: `389351c7d542fa8db7b00041f17fa285629230eff1e8a6c70f8ddaab3baba3df`;
-- реализован `src/efso_r4_space.py` с формой `query[2]`, `key[2][2]`, `value[2][2]`;
-- для domain `{-1,0,1}` определена structural cardinality `3^10 = 59049`;
-- добавлены structural tests `tests/test_r4_space.py`;
-- reference contract исправлен по фактической независимой реализации R4;
-- добавлен независимый EFSO evaluator `src/efso_r4_evaluator.py`;
-- добавлен внешний QWENRNS batch witness `validation/r4_attention_batch_oracle.py`;
-- добавлен exhaustive numerical harness `validation/r4_numerical_conformance.py`;
-- numerical harness не импортирует QWENRNS, а запускает его только через validation subprocess;
-- CI выполняет sparse checkout только требуемого external witness файла;
-- machine-readable numerical evidence предусмотрено в `evidence/r4_numerical_conformance.json`.
+- `FM2-R4-002 = PASS`;
+- `R4-NUM-001 = PASS`;
+- R4 exhaustive numerical contour: `59049` состояний, `59049` external outputs, `mismatch_count = 0`, `max_abs_error = 0.0`;
+- реализован `src/efso_transition.py`;
+- реализованы 11 независимых операторов: `ADD`, `MUL`, `REDUCE`, `RMSNorm`, `Activation`, `MatMul`, `Softmax`, `RoPE`, `Attention`, `MLP`, `Residual`;
+- добавлены tests `tests/test_transition.py`;
+- добавлен machine-readable evidence generator `validation/e5_001_evidence.py`;
+- E5 evidence предусмотрено в CI.
 
 ## 3. Незавершено
 
-- фактический PASS/FAIL CI для `R4-NUM-001`;
-- переход `FM2-R4-002` из RUNNING в PASS после фактического evidence;
-- E5 independent transition engine;
+- фактический PASS/FAIL CI для `E5-001`;
 - E6 exhaustive conformance;
 - E7 invariant engine;
 - E8 counterexample engine;
 - E9 conformance matrix;
 - E10 adversarial spaces;
 - E11 QWENRNS qualification bridge;
-- E12 reproducible verification harness.
+- E12 reproducible verification harness;
+- R5/R6/R7 numerical qualification;
+- NumPy float64 qualification.
 
-## 4. Критическая граница R4
+## 4. Независимость E5
 
-Старая модель `R4State(q, k, v)` с тремя векторами ширины 2 давала `3^6 = 729`, но не соответствовала фактической форме независимого R4 reference. Она не используется как numerical R4 space.
+`src/efso_transition.py` не должен импортировать IUT, QWENRNS, NumPy или Torch. Внешние references не являются runtime dependencies transition engine.
 
-Актуальная модель:
+Сложные операции `Attention` и `MLP` реализованы внутри EFSO через собственные primitive semantics.
+
+## 5. Текущая контрольная точка
 
 ```text
-query[2]
-key[2][2]
-value[2][2]
+E5-001 = RUNNING
 ```
 
-Reference semantics:
+## 6. Условия закрытия E5
 
 ```text
-score = dot(query, key_row)
-weight = exp(score - max(score)) / sum(exp(score - max(score)))
-out = sum(weight[row] * value[row])
-```
-
-Scaling отсутствует, поскольку его нет в фактическом independent R4 witness.
-
-## 5. Блокирующие условия
-
-EFSO не должен копировать внутреннюю архитектуру IUT или импортировать external oracle в runtime.
-
-`R4-NUM-001 = PASS` запрещён до фактического успешного CI run с `59049` состояниями, `59049` внешними результатами, нулём mismatches и сохранённым artifact.
-
-## 6. Текущая контрольная точка
-
-```text
-R4-NUM-001 = RUNNING
-```
-
-Последний созданный workflow:
-
-```text
-run #31
-run_id: 35045105316
-head: 69a83110099655a575496655d2549e62011bdd1b
-status: QUEUED
-```
-
-Он использует sparse checkout external witness.
-
-## 7. Условия закрытия R4 numerical qualification
-
-```text
-59049 EFSO states
-59049 external outputs
-mismatch_count = 0
-max_abs_error <= 1e-12
-state digest recorded
-machine-readable evidence emitted
+all tests PASS
+11 operators registered
+independence audit PASS
+primitive checks PASS
+composition replay PASS
+evidence generated
 artifact uploaded
 ```
 
-## 8. Текущее направление
+## 7. Текущее направление
 
 ```text
 FM0–FM3 structural baseline
           ↓
 E4 exhaustive enumeration = PASS
           ↓
-FM2-R4-002 structural alignment
+FM2-R4-002 structural alignment = PASS
           ↓
-R4-NUM-001 = RUNNING
+R4-NUM-001 = PASS
           ↓
-E5 independent transition engine
+E5 independent transition engine = RUNNING
           ↓
 E6 exhaustive conformance
           ↓

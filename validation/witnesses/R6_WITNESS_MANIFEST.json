@@ -1,0 +1,11 @@
+{
+  "schema_version": "EFSO-R6-WITNESS-MANIFEST-1",
+  "reference_id": "QWENRNS-R6-BATCH",
+  "source_repository": "DEXTR-GROUP/QWENRNS",
+  "source_path": "validation/r6_transformer_batch_oracle.py",
+  "source_commit": "a40bdbfd999535f2bb9c57da6f2a2e861e49c12c",
+  "source_blob_sha": "dcea89f0c6246d1f466a91f696c3091d8e9c8948",
+  "snapshot_path": "validation/witnesses/r6_transformer_batch_oracle.py",
+  "runtime_external_repository_access": false,
+  "witness_mode": "external-origin-pinned-snapshot"
+}

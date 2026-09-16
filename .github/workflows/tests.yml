@@ -42,6 +42,10 @@ jobs:
         run: python validation/fm2_r5_001_evidence.py
       - name: Run exhaustive R5 numerical conformance
         run: python validation/r5_numerical_conformance.py
+      - name: Generate FM2-R6-001 evidence
+        run: python validation/fm2_r6_001_evidence.py
+      - name: Run exhaustive R6 numerical conformance
+        run: python validation/r6_numerical_conformance.py
       - name: Upload EFSO qualification evidence
         uses: actions/upload-artifact@v4
         with:

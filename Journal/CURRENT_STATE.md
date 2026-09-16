@@ -1,34 +1,37 @@
 # EFSO — ТЕКУЩЕЕ СОСТОЯНИЕ
 
-**Идентификатор:** EFSO-STATE-002  
+**Идентификатор:** EFSO-STATE-003  
 **Статус:** В РАБОТЕ
 
 ## 1. Рабочая граница
 
 Реализация независимого `Exhaustive Finite-State Oracle` для исчерпывающей проверки явно определённых конечных пространств состояний и переходов.
 
-Текущая граница включает первый исполняемый structural qualification contour FM0–FM3.
+Текущая граница включает FM0–FM3 structural baseline и реализацию E4 exhaustive enumerator.
 
 ## 2. Подтверждено
 
 - создан отдельный репозиторий EFSO;
 - определено назначение EFSO как независимого verification-контура;
-- создана и обновлена дорожная карта реализации;
 - зафиксировано ограничение exhaustive-проверки конечным пространством `F`;
-- определены контрольные вехи FM0–FM12;
 - создан нормативный Journal EFSO;
 - NumPy, C и другие внешние numerical oracle не являются частью EFSO runtime;
 - EFSO не зависит от IUT;
 - реализован `src/efso_fm03.py` как минимальный FM0–FM3 structural contour;
-- добавлены `tests/test_fm03.py`;
 - завершён `FM0-FM3-001` со статусом `PASS`;
-- проверена finite-state cardinality для пространства 3×3: `|F| = 9`;
-- проверены uniqueness, отсутствие пропусков и дубликатов, canonical identity и transition closure.
+- конечное базовое пространство 3×3 имеет `|F| = 9`;
+- реализован `src/efso_exhaustive.py` для exact cardinality, uniqueness, duplicate detection и replay-order verification;
+- добавлены тесты `tests/test_exhaustive.py`;
+- добавлен CI workflow `.github/workflows/tests.yml` для автоматического выполнения тестов;
+- R4 qualification space формально определён как `3^6 = 729` состояний;
+- удалён устаревший локальный numerical adapter `src/r4_qualification.py`, который не соответствовал полноценной Attention semantics;
+- `src/efso_r4_qualification.py` оставлен structural-only: внешний reference остаётся вне EFSO runtime;
+- E4 зарегистрирован в Journal как `RUNNING` до фактического CI evidence.
 
 ## 3. Незавершено
 
-- формальная qualification adapter model для внешних R4–R7/NumPy references;
-- полноценный exhaustive enumerator E4;
+- фактическое выполнение E4 в CI и сохранение machine-readable evidence;
+- полноценное независимое numerical сравнение R4 с внешним QWENRNS reference;
 - независимый transition engine E5;
 - exhaustive conformance E6;
 - invariant engine E7;
@@ -36,43 +39,35 @@
 - conformance matrix E9;
 - adversarial spaces E10;
 - QWENRNS qualification bridge E11;
-- reproducible verification harness E12;
-- расширенное machine-readable evidence для всех qualification runs.
+- reproducible verification harness E12.
 
 ## 4. Блокирующие условия
 
 EFSO не должен копировать внутреннюю архитектуру IUT или импортировать external oracle в runtime.
 
-Численные reference R4 → R5 → R6 → R7 → NumPy float64 должны подключаться только через внешний qualification contour.
+R4 numerical PASS не может быть объявлен до появления фактического независимого reference comparison evidence. Наличие 729 перечисленных состояний само по себе numerical conformance не доказывает.
 
 ## 5. Последнее подтверждённое состояние
 
 ```text
 FM0-FM3-001 = PASS
-```
-
-Минимальный structural baseline воспроизводим и зафиксирован в:
-
-```text
-Journal/EXPERIMENTS/FM0-FM3-001.md
-src/efso_fm03.py
-tests/test_fm03.py
+FM2-R4-001  = PASS
+E4-001       = RUNNING
 ```
 
 ## 6. Следующая контрольная точка
 
-**FM2/FM3 Qualification Adapter → R4**
+**E4-001 → CI evidence**
 
-Цель: расширить текущую structural модель до явного qualification contract, который позволяет EFSO исчерпывающе перечислить конечное пространство R4 и сравнить результаты с независимым R4 numerical reference, не импортируя его в EFSO.
+Цель: фактически выполнить exhaustive enumerator и подтвердить exact cardinality, uniqueness, duplicate rejection и replay-order determinism.
 
 Условие закрытия:
 
 ```text
-R4 qualification case defined
-finite space cardinality known
-reference interface isolated
-exhaustive comparison protocol executable
+CI run exists
+all E4 tests PASS
 machine-readable evidence emitted
+E4 registry status can move to PASS
 ```
 
 ## 7. Текущее направление
@@ -80,11 +75,11 @@ machine-readable evidence emitted
 ```text
 FM0–FM3 structural baseline
           ↓
-R4 qualification adapter
-          ↓
 E4 exhaustive enumeration
           ↓
-R4 exhaustive conformance
+R4 structural qualification
+          ↓
+R4 independent numerical conformance
           ↓
 R5 → R6 → R7
           ↓

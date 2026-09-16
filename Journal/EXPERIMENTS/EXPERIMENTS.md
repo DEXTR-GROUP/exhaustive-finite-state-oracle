@@ -6,7 +6,8 @@
 |---|---|---|
 | FM0-FM3-001 | Первый исполняемый structural qualification contour: formal boundary, independence, finite-state model, exact structural properties | PASS |
 | FM2-R4-001 | Первое конечное пространство R4: cardinality, canonical identity, exhaustive enumeration model | PASS |
-| E4-001 | Универсальный exhaustive enumerator: exact cardinality, uniqueness, duplicate detection, replay order | RUNNING |
+| E4-001 | Универсальный exhaustive enumerator: exact cardinality, uniqueness, duplicate detection, replay order | PASS |
+| FM2-R4-002 | Корректное соответствие формы конечного R4-space независимой Attention semantics | PLANNED |
 
 ## Правила реестра
 
@@ -29,6 +30,8 @@ RUNNING
 
 ## Последнее состояние
 
-`FM0-FM3-001` и `FM2-R4-001` подтверждают structural baseline и конечную модель R4. `E4-001` реализован и ожидает выполнения в CI; полное численное сравнение с внешним R4 reference, R5–R7, NumPy float64 и E5–E12 ещё не закрыты.
+`FM0-FM3-001`, `FM2-R4-001` и `E4-001` подтверждены в пределах их заявленных structural scopes. `E4-001` закрыт CI run #9 с machine-readable artifact. При подготовке numerical R4 conformance выявлена необходимость отдельно подтвердить соответствие формы R4 finite-state model независимой Attention semantics; для этого создана контрольная точка `FM2-R4-002`.
+
+`R4/R5/R6/R7` numerical conformance, NumPy float64 и E5–E12 ещё не закрыты.
 
 Новые проверки добавляются только после определения вопроса, конечного пространства и критерия завершения.

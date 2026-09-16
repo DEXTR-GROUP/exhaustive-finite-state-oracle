@@ -1,105 +1,94 @@
 # EFSO — ТЕКУЩЕЕ СОСТОЯНИЕ
 
-**Идентификатор:** EFSO-STATE-004  
+**Идентификатор:** EFSO-STATE-005  
 **Статус:** В РАБОТЕ
 
 ## 1. Рабочая граница
 
 Реализация независимого `Exhaustive Finite-State Oracle` для исчерпывающей проверки явно определённых конечных пространств состояний и переходов.
 
-Текущая граница включает FM0–FM3 structural baseline и закрытый E4 exhaustive enumerator. Следующая граница — корректная семантическая модель R4 перед numerical conformance.
+FM0–FM3 structural baseline и E4 exhaustive enumerator закрыты. Текущая рабочая граница — `FM2-R4-002`: корректная конечная модель primitive Attention перед numerical conformance.
 
 ## 2. Подтверждено
 
-- создан отдельный репозиторий EFSO;
-- определено назначение EFSO как независимого verification-контура;
-- зафиксировано ограничение exhaustive-проверки конечным пространством `F`;
-- создан нормативный Journal EFSO;
-- NumPy, C и другие внешние numerical oracle не являются частью EFSO runtime;
-- EFSO не зависит от IUT;
-- реализован `src/efso_fm03.py` как минимальный FM0–FM3 structural contour;
-- завершён `FM0-FM3-001` со статусом `PASS`;
-- конечное базовое пространство 3×3 имеет `|F| = 9`;
-- реализован `src/efso_exhaustive.py` для exact cardinality, uniqueness, duplicate detection и replay-order verification;
-- добавлены тесты `tests/test_exhaustive.py`;
-- добавлен CI workflow `.github/workflows/tests.yml`;
-- E4 evidence generator `validation/e4_001_evidence.py` добавлен в CI;
-- E4-001 закрыт фактическим CI run #9 с 9/9 тестами PASS и machine-readable artifact;
-- E4 enumeration digest для `E4-BASE-3x3` зафиксирован как `389351c7d542fa8db7b00041f17fa285629230eff1e8a6c70f8ddaab3baba3df`;
+- `FM0-FM3-001 = PASS`;
+- `FM2-R4-001 = PASS` только в пределах исторического structural placeholder scope;
 - `E4-001 = PASS`;
-- исторический `FM2-R4-001 = PASS` сохранён без переписывания истории, но его scope ограничен structural placeholder-space;
-- зарегистрирован `FM2-R4-002` для проверки соответствия формы R4 finite-state model фактической Attention semantics независимого reference.
+- E4 CI run #9: `35044801336`;
+- E4 artifact: `efso-e4-001-evidence`, artifact `10425614571`;
+- E4 digest: `389351c7d542fa8db7b00041f17fa285629230eff1e8a6c70f8ddaab3baba3df`;
+- добавлен `src/efso_r4_space.py` с формой `query[2]`, `key[2][2]`, `value[2][2]`;
+- для domain `{-1,0,1}` новая R4 structural cardinality определена как `3^10 = 59049`;
+- добавлены `tests/test_r4_space.py`;
+- добавлен внешний shape contract `validation/r4_reference_contract.json` без импорта external oracle в EFSO runtime;
+- добавлен `validation/fm2_r4_002_evidence.py`;
+- evidence generation включён в CI.
 
 ## 3. Незавершено
 
-- `FM2-R4-002`: корректная форма и cardinality R4 finite-state space;
-- полноценное независимое numerical сравнение R4 с внешним QWENRNS reference;
-- независимый transition engine E5;
-- exhaustive conformance E6;
-- invariant engine E7;
-- counterexample engine E8;
-- conformance matrix E9;
-- adversarial spaces E10;
-- QWENRNS qualification bridge E11;
-- reproducible verification harness E12.
+- фактический CI evidence для `FM2-R4-002`;
+- numerical R4 conformance с независимым QWENRNS reference;
+- E5 independent transition engine;
+- E6 exhaustive conformance;
+- E7 invariant engine;
+- E8 counterexample engine;
+- E9 conformance matrix;
+- E10 adversarial spaces;
+- E11 QWENRNS qualification bridge;
+- E12 reproducible verification harness.
 
-## 4. Важное исправление границы R4
+## 4. Критическая граница R4
 
-Текущий structural placeholder `R4State(q, k, v)` с тремя векторами ширины 2 даёт `3^6 = 729` состояний, но не соответствует форме независимого R4 Attention reference, где используются `query[2]`, `key[2][2]` и `value[2][2]`.
+Старая модель `R4State(q, k, v)` с тремя векторами ширины 2 давала `3^6 = 729`, но не соответствовала форме независимого R4 reference. Она не используется как numerical R4 space.
 
-Следовательно, `729` не может использоваться как доказанная cardinality numerical R4 space. До E6 необходимо определить и проверить корректную finite-state shape. Это не отменяет закрытый E4.
+Новая structural model использует:
+
+```text
+query[2]
+key[2][2]
+value[2][2]
+```
+
+и содержит 10 конечных scalar parameters, следовательно:
+
+```text
+|F| = 3^10 = 59049
+```
+
+Это пока structural shape alignment. Численная семантика ещё не квалифицирована.
 
 ## 5. Блокирующие условия
 
 EFSO не должен копировать внутреннюю архитектуру IUT или импортировать external oracle в runtime.
 
-R4 numerical PASS не может быть объявлен до появления фактического независимого reference comparison evidence и корректной finite-state model.
+R4 numerical PASS запрещён до появления независимого numerical comparison evidence.
 
-## 6. Последнее подтверждённое состояние
+## 6. Текущая контрольная точка
 
 ```text
-FM0-FM3-001 = PASS
-FM2-R4-001  = PASS (structural placeholder scope)
-E4-001      = PASS
-FM2-R4-002  = PLANNED
+FM2-R4-002 = RUNNING
 ```
-
-## 7. Следующая контрольная точка
-
-**FM2-R4-002 → R4 semantic shape alignment**
-
-Цель: определить минимальное конечное пространство, которое действительно соответствует независимой primitive Attention semantics.
 
 Условие закрытия:
 
 ```text
-R4 state shape defined
-exact cardinality derived
-canonical identity defined
-finite enumeration reproducible
-reference semantics aligned
+CI PASS
+shape alignment PASS
+authorized cardinality = 59049
+unique = 59049
+missing = 0
+duplicates = 0
 machine-readable evidence emitted
 ```
 
-## 8. Evidence E4
-
-```text
-CI run: #9
-run_id: 35044801336
-commit: 267bdff265fd3f713bccdb06db9285c4cc25e89e
-artifact: efso-e4-001-evidence
-artifact_id: 10425614571
-artifact_sha256: 95d6a03571bd69dbeea4b977cf370d8812abe520d14b68e11a9ec07b3c100411
-```
-
-## 9. Текущее направление
+## 7. Текущее направление
 
 ```text
 FM0–FM3 structural baseline
           ↓
 E4 exhaustive enumeration = PASS
           ↓
-FM2-R4-002 semantic shape alignment
+FM2-R4-002 = RUNNING
           ↓
 R4 independent numerical conformance
           ↓

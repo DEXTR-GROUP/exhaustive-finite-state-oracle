@@ -7,8 +7,9 @@
 | FM0-FM3-001 | Первый исполняемый structural qualification contour: formal boundary, independence, finite-state model, exact structural properties | PASS |
 | FM2-R4-001 | Первое конечное пространство R4: cardinality, canonical identity, exhaustive enumeration model | PASS |
 | E4-001 | Универсальный exhaustive enumerator: exact cardinality, uniqueness, duplicate detection, replay order | PASS |
-| FM2-R4-002 | Корректное соответствие формы конечного R4-space независимой Attention semantics | RUNNING |
-| R4-NUM-001 | Exhaustive numerical conformance EFSO R4 evaluator ↔ independent QWENRNS batch oracle | RUNNING |
+| FM2-R4-002 | Корректное соответствие формы конечного R4-space независимой Attention semantics | PASS |
+| R4-NUM-001 | Exhaustive numerical conformance EFSO R4 evaluator ↔ independent QWENRNS batch oracle | PASS |
+| E5-001 | Independent deterministic transition engine | RUNNING |
 
 ## Правила реестра
 
@@ -31,8 +32,10 @@ RUNNING
 
 ## Последнее состояние
 
-`FM0-FM3-001`, `FM2-R4-001` и `E4-001` подтверждены в пределах их заявленных structural scopes. `E4-001` закрыт CI run #9 с machine-readable artifact. `FM2-R4-002` реализован и проверяется вместе с первым полным numerical R4 contour `R4-NUM-001`.
+`FM0-FM3-001`, `FM2-R4-001`, `E4-001`, `FM2-R4-002` и `R4-NUM-001` подтверждены в пределах своих заявленных scopes. `R4-NUM-001` закрывает полный numerical contour из `59049` состояний без mismatches.
 
-`R4/R5/R6/R7` numerical conformance, NumPy float64 и E5–E12 ещё не закрыты.
+Текущая проверка `E5-001` квалифицирует собственный transition engine EFSO. После её закрытия следующим этапом будет E6 exhaustive conformance.
+
+`R5/R6/R7` numerical conformance, NumPy float64 и E6–E12 ещё не закрыты.
 
 Новые проверки добавляются только после определения вопроса, конечного пространства и критерия завершения.

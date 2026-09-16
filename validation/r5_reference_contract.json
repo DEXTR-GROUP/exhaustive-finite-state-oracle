@@ -1,0 +1,14 @@
+{
+  "schema_version": "EFSO-R5-REFERENCE-CONTRACT-1",
+  "reference_id": "QWENRNS-R5-BATCH",
+  "source": "DEXTR-GROUP/QWENRNS/validation/r5_mlp_batch_oracle.py",
+  "primitive": "one-input, two-hidden-unit gated MLP with SiLU gate",
+  "input_shape": [1],
+  "gate_weight_shape": [2, 1],
+  "up_weight_shape": [2, 1],
+  "down_weight_shape": [1, 2],
+  "scalar_parameter_count": 7,
+  "finite_domain": [-1, 0, 1],
+  "activation": "SiLU(x) = x / (1 + exp(-x))",
+  "composition": "down((SiLU(gate(input))) elementwise-multiplied by up(input))"
+}

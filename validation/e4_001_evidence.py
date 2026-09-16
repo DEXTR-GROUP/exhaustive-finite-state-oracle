@@ -10,11 +10,15 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from itertools import product
 from pathlib import Path
 
-from src.efso_exhaustive import exhaustive_enumerate, verify_reproducibility
-from src.efso_fm03 import State, state_id
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from efso_exhaustive import exhaustive_enumerate, verify_reproducibility
+from efso_fm03 import State, state_id
 
 
 SPACE_ID = "E4-BASE-3x3"

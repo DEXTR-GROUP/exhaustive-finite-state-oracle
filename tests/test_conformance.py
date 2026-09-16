@@ -2,6 +2,8 @@ from dataclasses import dataclass
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from efso_conformance import exhaustive_compare
@@ -30,7 +32,7 @@ def test_exhaustive_conformance_accepts_fixed_tolerance():
     states = [State(0), State(1)]
     report = exhaustive_compare(states, [(1.0, 2.0), (3.0, 4.0)], [(1.0, 2.0), (3.0 + 1e-9, 4.0)], tolerance=1e-8)
     assert report.conformant
-    assert report.max_abs_error == 1e-9
+    assert report.max_abs_error == pytest.approx(1e-9)
 
 
 def test_exhaustive_conformance_emits_first_counterexample():

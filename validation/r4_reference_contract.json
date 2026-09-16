@@ -1,11 +1,15 @@
 {
-  "schema_version": "EFSO-R4-REFERENCE-CONTRACT-1",
-  "reference_id": "QWENRNS-R4",
-  "source": "DEXTR-GROUP/QWENRNS/validation/r4_attention_oracle.py",
-  "primitive": "scaled-dot-product attention with one query and two key/value rows",
+  "schema_version": "EFSO-R4-REFERENCE-CONTRACT-2",
+  "reference_id": "QWENRNS-R4-BATCH",
+  "source": "DEXTR-GROUP/QWENRNS/validation/r4_attention_batch_oracle.py",
+  "primitive": "two-row dot-product attention with softmax normalization",
   "query_shape": [2],
   "key_shape": [2, 2],
   "value_shape": [2, 2],
   "scalar_parameter_count": 10,
-  "finite_domain": [-1, 0, 1]
+  "finite_domain": [-1, 0, 1],
+  "score_definition": "dot(query, key_row)",
+  "normalization": "exp(score - max(score)) / sum(exp(score - max(score)))",
+  "output_definition": "sum(weight[row] * value[row])",
+  "scaling": null
 }

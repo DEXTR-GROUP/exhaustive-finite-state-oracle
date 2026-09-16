@@ -15,6 +15,10 @@ jobs:
         with:
           repository: DEXTR-GROUP/QWENRNS
           path: _witness/QWENRNS
+          fetch-depth: 1
+          sparse-checkout: |
+            validation/r4_attention_batch_oracle.py
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"

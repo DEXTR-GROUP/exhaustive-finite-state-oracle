@@ -1,13 +1,13 @@
 # EFSO — ТЕКУЩЕЕ СОСТОЯНИЕ
 
-**Идентификатор:** EFSO-STATE-010  
+**Идентификатор:** EFSO-STATE-011  
 **Статус:** В РАБОТЕ
 
 ## 1. Рабочая граница
 
 Реализация независимого `Exhaustive Finite-State Oracle` для исчерпывающей проверки явно определённых конечных пространств состояний и переходов.
 
-FM0–FM3, E4, R4 numerical qualification, E5, E6, E7, E8, E9, E10 и E11 закрыты в пределах заявленных scopes. Текущая рабочая граница — E12 reproducible verification harness.
+FM0–FM3, E4, R4 numerical qualification, E5, E6, E7, E8, E9, E10, E11 и E12 закрыты в пределах заявленных scopes. Текущая рабочая граница переносится на следующий незакрытый numerical qualification axis: R5.
 
 ## 2. Подтверждено
 
@@ -23,30 +23,44 @@ FM0–FM3, E4, R4 numerical qualification, E5, E6, E7, E8, E9, E10 и E11 зак
 - `E9-001 = PASS`: coverage matrix, 5 квалифицированных строк;
 - `E10-001 = PASS`: 7 adversarial finite spaces;
 - `E11-001 = PASS`: external witness bridge изолирован, mutation independence подтверждена;
-- CI run `35048384885`, commit `40f8e21aa7d7e6d57eb5b5bcaaf4a95f37c3bbbc`, job `104643152987` завершён успешно; artifact `10427872755`, SHA-256 `7a2bd933aa13c9a12997f0aa807fd037bce52828a3c1d9409bbc489f1316754f`.
+- `E12-001 = PASS`: два последовательных прогона полного evidence contour дали идентичные return codes, stdout/stderr digests и канонический evidence digest;
+- CI run `35048841379`, commit `a426212ac5a29ee3f94fa507b3fd9550bb53b1b4`, job `104644596946` завершён успешно; artifact `10428436038`, SHA-256 `12b5271373be5c0de3056ad9538871a36e6ddd8c0df7e1a0c7b4a3482b5f6079`.
+
+E12 evidence:
+
+```text
+run_count = 2
+evidence_reproducible = true
+first_evidence_sha256  = 9ccbbc26eb29440f016b67d57dd5f7afee5231012f2443fba9c0e05214470a93
+second_evidence_sha256 = 9ccbbc26eb29440f016b67d57dd5f7afee5231012f2443fba9c0e05214470a93
+source_tree_sha256 = c0a4cdef514e6791546e1a5059ff2e02be0bbaeff065cabb2ca37a053236b427
+```
 
 ## 3. Незавершено
 
-- `E12-001` reproducible verification harness;
-- R5/R6/R7 numerical qualification;
+- R5 numerical qualification;
+- R6 numerical qualification;
+- R7 numerical qualification;
 - NumPy float64 qualification.
 
 ## 4. Текущая контрольная точка
 
 ```text
-E12-001 = RUNNING
+R5-NUM-001 = PLANNED
 ```
 
-## 5. Условия закрытия E12-001
+## 5. Условия закрытия R5-NUM-001
 
 ```text
-complete qualified command suite executed twice
-all commands PASS in both runs
-return codes identical
-stdout digests identical
-stderr digests identical
-machine-readable evidence digest identical
-evidence generated
+explicit finite R5 state space
+independent EFSO R5 evaluator
+independent external-origin witness
+exhaustive enumeration of the declared space
+actual result count == expected cardinality
+mismatch_count == 0
+fixed numerical tolerance
+machine-readable evidence
+CI success
 artifact uploaded
 ```
 
@@ -73,7 +87,13 @@ E10 = PASS
       ↓
 E11 = PASS
       ↓
-E12 reproducibility = RUNNING
+E12 = PASS
       ↓
-R5 / R6 / R7 / NumPy float64
+R5-NUM-001 = PLANNED
+      ↓
+R6-NUM-001
+      ↓
+R7-NUM-001
+      ↓
+NumPy float64
 ```

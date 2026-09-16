@@ -40,7 +40,7 @@ def test_first_failure_is_deterministic() -> None:
     )
 
 
-def test_minimization_reaches_smallest_failure() -> None:
+def test_minimization_reaches_smallest_failure_and_recomputes_values() -> None:
     witness = Counterexample(
         index=7,
         state_id="state-7",
@@ -57,10 +57,16 @@ def test_minimization_reaches_smallest_failure() -> None:
     def shrink(state: State):
         return (State(state.value // 2), State(max(0, state.value - 1)))
 
-    minimized = minimize_counterexample(witness, fails, shrink)
+    def observe(state: State):
+        return state.value, 0, "injected failure", float(state.value)
+
+    minimized = minimize_counterexample(witness, fails, shrink, observe=observe)
 
     assert minimized.state == State(4)
     assert minimized.state_id == "state-4"
+    assert minimized.actual == 4
+    assert minimized.expected == 0
+    assert minimized.max_abs_error == 4.0
 
 
 def test_minimization_replay_is_reproducible() -> None:
@@ -80,7 +86,10 @@ def test_minimization_replay_is_reproducible() -> None:
     def shrink(state: State):
         return (State(state.value - 2), State(state.value // 2))
 
-    a = minimize_counterexample(witness, fails, shrink)
-    b = minimize_counterexample(witness, fails, shrink)
+    def observe(state: State):
+        return state.value, 0, "injected failure", float(state.value)
+
+    a = minimize_counterexample(witness, fails, shrink, observe=observe)
+    b = minimize_counterexample(witness, fails, shrink, observe=observe)
 
     assert a == b

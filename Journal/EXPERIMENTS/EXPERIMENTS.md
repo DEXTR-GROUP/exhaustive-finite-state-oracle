@@ -19,8 +19,8 @@
 | E12-001 | Reproducible verification harness | PASS |
 | FM2-R5-001 | Correct finite-state model for independent gated MLP qualification | PASS |
 | R5-NUM-001 | Exhaustive numerical conformance EFSO R5 evaluator ↔ independent QWENRNS batch oracle | PASS |
-| FM2-R6-001 | Конечная модель минимального Transformer Block для независимой квалификации | RUNNING |
-| R6-NUM-001 | Exhaustive numerical conformance EFSO R6 evaluator ↔ independent QWENRNS batch oracle | RUNNING |
+| FM2-R6-001 | Конечная модель минимального Transformer Block для независимой квалификации | PASS |
+| R6-NUM-001 | Exhaustive numerical conformance EFSO R6 evaluator ↔ independent QWENRNS batch oracle | PASS |
 
 ## Правила реестра
 
@@ -47,8 +47,8 @@ RUNNING
 
 R5 contour закрыт: `FM2-R5-001 = PASS`, `R5-NUM-001 = PASS`, `2187` состояний и `2187` external outputs, `mismatch_count = 0` при tolerance `1e-12`.
 
-Текущий R6 contour состоит из `FM2-R6-001` и `R6-NUM-001`. Оба переведены в `RUNNING` до получения фактического CI evidence.
+R6 contour закрыт: `FM2-R6-001 = PASS`, `R6-NUM-001 = PASS`, `6561` состояний и `6561` external outputs, `mismatch_count = 0` при tolerance `1e-12`.
 
-`R7` numerical conformance и NumPy float64 ещё не закрыты.
+Следующая незакрытая numerical qualification: `R7-NUM-001`. После R7 остаётся NumPy float64 qualification.
 
 Новые проверки добавляются только после определения вопроса, конечного пространства и критерия завершения.

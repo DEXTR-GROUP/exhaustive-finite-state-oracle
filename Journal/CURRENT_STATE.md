@@ -1,13 +1,13 @@
 # EFSO — ТЕКУЩЕЕ СОСТОЯНИЕ
 
-**Идентификатор:** EFSO-STATE-011  
+**Идентификатор:** EFSO-STATE-012  
 **Статус:** В РАБОТЕ
 
 ## 1. Рабочая граница
 
 Реализация независимого `Exhaustive Finite-State Oracle` для исчерпывающей проверки явно определённых конечных пространств состояний и переходов.
 
-FM0–FM3, E4, R4 numerical qualification, E5, E6, E7, E8, E9, E10, E11 и E12 закрыты в пределах заявленных scopes. Текущая рабочая граница переносится на следующий незакрытый numerical qualification axis: R5.
+FM0–FM3, E4, R4 numerical qualification, E5, E6, E7, E8, E9, E10, E11 и E12 закрыты в пределах заявленных scopes. Текущая рабочая граница: R5 numerical qualification.
 
 ## 2. Подтверждено
 
@@ -24,47 +24,56 @@ FM0–FM3, E4, R4 numerical qualification, E5, E6, E7, E8, E9, E10, E11 и E12 �
 - `E10-001 = PASS`: 7 adversarial finite spaces;
 - `E11-001 = PASS`: external witness bridge изолирован, mutation independence подтверждена;
 - `E12-001 = PASS`: два последовательных прогона полного evidence contour дали идентичные return codes, stdout/stderr digests и канонический evidence digest;
-- CI run `35048841379`, commit `a426212ac5a29ee3f94fa507b3fd9550bb53b1b4`, job `104644596946` завершён успешно; artifact `10428436038`, SHA-256 `12b5271373be5c0de3056ad9538871a36e6ddd8c0df7e1a0c7b4a3482b5f6079`.
+- CI baseline `35048841379`, commit `a426212ac5a29ee3f94fa507b3fd9550bb53b1b4`, job `104644596946` завершён успешно; artifact `10428436038`, SHA-256 `12b5271373be5c0de3056ad9538871a36e6ddd8c0df7e1a0c7b4a3482b5f6079`.
 
-E12 evidence:
+## 3. Реализовано для текущей точки R5
 
-```text
-run_count = 2
-evidence_reproducible = true
-first_evidence_sha256  = 9ccbbc26eb29440f016b67d57dd5f7afee5231012f2443fba9c0e05214470a93
-second_evidence_sha256 = 9ccbbc26eb29440f016b67d57dd5f7afee5231012f2443fba9c0e05214470a93
-source_tree_sha256 = c0a4cdef514e6791546e1a5059ff2e02be0bbaeff065cabb2ca37a053236b427
-```
+- `src/efso_r5_space.py`: явное конечное пространство `3^7 = 2187`;
+- `src/efso_r5_evaluator.py`: независимый EFSO-side R5 evaluator;
+- `validation/witnesses/r5_mlp_batch_oracle.py`: immutable snapshot external-origin QWENRNS witness;
+- `validation/witnesses/R5_WITNESS_MANIFEST.json`: provenance source commit + source Git blob SHA;
+- `validation/fm2_r5_001_evidence.py`: структурное evidence конечного пространства;
+- `validation/r5_numerical_conformance.py`: exhaustive state-by-state comparison с fixed tolerance `1e-12` и проверкой provenance snapshot;
+- CI больше не делает checkout приватного QWENRNS. R4 и R5 qualification используют pinned local witness snapshots.
 
-## 3. Незавершено
+## 4. Текущая инфраструктурная причина изменения
 
-- R5 numerical qualification;
+Предыдущая схема CI пыталась выполнять `actions/checkout` для приватного `DEXTR-GROUP/QWENRNS`. Runner возвращал `Repository not found`. `ref: main` устранил только разрешение default branch и подтвердил фактический блокирующий уровень: отсутствие доступа runner к приватному repository.
+
+Замена QWENRNS другим oracle не выполнялась. External-origin identity сохранена через pinned snapshot и provenance verification.
+
+## 5. Незавершено
+
+- закрытие `FM2-R5-001` по CI evidence;
+- закрытие `R5-NUM-001` по фактическому CI evidence;
 - R6 numerical qualification;
 - R7 numerical qualification;
 - NumPy float64 qualification.
 
-## 4. Текущая контрольная точка
+## 6. Текущая контрольная точка
 
 ```text
-R5-NUM-001 = PLANNED
+FM2-R5-001 = RUNNING
+R5-NUM-001 = RUNNING
 ```
 
-## 5. Условия закрытия R5-NUM-001
+## 7. Условия закрытия R5-NUM-001
 
 ```text
 explicit finite R5 state space
 independent EFSO R5 evaluator
-independent external-origin witness
+external-origin pinned witness snapshot
+verified source provenance
 exhaustive enumeration of the declared space
 actual result count == expected cardinality
 mismatch_count == 0
-fixed numerical tolerance
+max_abs_error <= 1e-12
 machine-readable evidence
 CI success
 artifact uploaded
 ```
 
-## 6. Текущее направление
+## 8. Текущее направление
 
 ```text
 FM0–FM3 = PASS
@@ -89,7 +98,9 @@ E11 = PASS
       ↓
 E12 = PASS
       ↓
-R5-NUM-001 = PLANNED
+FM2-R5-001 = RUNNING
+      ↓
+R5-NUM-001 = RUNNING
       ↓
 R6-NUM-001
       ↓

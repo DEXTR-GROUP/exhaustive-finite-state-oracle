@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from efso_counterexample import Counterexample, first_failure, minimize_counterexample
+from efso_counterexample import first_failure, minimize_counterexample
 
 
 @dataclass(frozen=True)
@@ -35,6 +35,12 @@ def shrink(state: State):
     return (State(state.value // 2), State(max(0, state.value - 1)))
 
 
+def observe(state: State) -> tuple[int, int, str, float]:
+    actual = state.value
+    expected = 0
+    return actual, expected, "injected failure", float(abs(actual - expected))
+
+
 def main() -> None:
     states = tuple(State(i) for i in range(8))
     actual = tuple(i for i in range(8))
@@ -47,13 +53,27 @@ def main() -> None:
     def fails(state: State) -> bool:
         return state.value >= 4
 
-    minimized = minimize_counterexample(initial, fails, shrink)
-
-    replay = minimize_counterexample(initial, fails, shrink)
+    minimized = minimize_counterexample(
+        initial,
+        fails,
+        shrink,
+        observe=observe,
+    )
+    replay = minimize_counterexample(
+        initial,
+        fails,
+        shrink,
+        observe=observe,
+    )
     reproducible = minimized == replay
+    state_consistent = (
+        minimized.actual == minimized.state.value
+        and minimized.expected == 0
+        and minimized.max_abs_error == float(minimized.state.value)
+    )
 
     evidence = {
-        "schema_version": "EFSO-E8-001-1",
+        "schema_version": "EFSO-E8-001-2",
         "check_id": "E8-001",
         "scope": "deterministic counterexample extraction and minimization engine qualification",
         "finite_fixture": {
@@ -64,11 +84,12 @@ def main() -> None:
         "initial_counterexample": asdict(initial),
         "minimized_counterexample": asdict(minimized),
         "reproducible_minimization": reproducible,
+        "state_consistent_witness": state_consistent,
         "minimization_rule": "accept first failing shrink candidate and repeat until no candidate preserves failure",
         "randomness": False,
         "external_runtime_dependency": False,
         "qualification": "PASS"
-        if reproducible and minimized.state.value == 4
+        if reproducible and state_consistent and minimized.state.value == 4
         else "FAIL",
         "source_commit": os.environ.get("GITHUB_SHA", "UNKNOWN"),
     }

@@ -10,7 +10,7 @@
 | FM2-R4-002 | Корректное соответствие формы конечного R4-space независимой Attention semantics | PASS |
 | R4-NUM-001 | Exhaustive numerical conformance EFSO R4 evaluator ↔ independent QWENRNS batch oracle | PASS |
 | E5-001 | Independent deterministic transition engine | PASS |
-| E6-001 | Exhaustive conformance engine: EFSO transition model against a finite implementation space | PLANNED |
+| E6-001 | Qualification of generic exhaustive conformance contour on full R4 finite space | RUNNING |
 
 ## Правила реестра
 
@@ -35,8 +35,8 @@ RUNNING
 
 `FM0-FM3-001`, `FM2-R4-001`, `E4-001`, `FM2-R4-002`, `R4-NUM-001` и `E5-001` подтверждены в пределах своих заявленных scopes. `R4-NUM-001` закрывает полный numerical contour из `59049` состояний без mismatches. `E5-001` закрывает собственный independent transition engine.
 
-Текущая следующая контрольная точка: `E6-001`, exhaustive conformance на явно определённом конечном implementation space.
+`E6-001` квалифицирует общий exhaustive conformance comparator на полном R4 finite space. Это ещё не IUT-specific conformance claim.
 
-`R5/R6/R7` numerical conformance, NumPy float64 и E6–E12 ещё не закрыты.
+`R5/R6/R7` numerical conformance, NumPy float64 и E7–E12 ещё не закрыты.
 
 Новые проверки добавляются только после определения вопроса, конечного пространства и критерия завершения.

@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""External-origin R5 numerical witness snapshot.
+"""Independent batch numerical oracle for a tiny gated MLP.
 
-Source: DEXTR-GROUP/QWENRNS/validation/r5_mlp_batch_oracle.py
-Source blob SHA: 901125629523f473a597c9eeebdb8b6cb26a41d7
-Source commit: 4db6a1d314a1d0becb63995927feb90f301eb20e
+Input: JSON array of objects containing input[1], gate_weight[2],
+up_weight[2], and down_weight[2].
+Output: JSON array of one-element output vectors.
 
-This file is executed only by the validation harness and is never imported by
-EFSO runtime code. The snapshot is kept locally so CI does not require access
-to the private QWENRNS repository.
+No EFSO code, IUT code, or subprocess is used. Only Python's standard
+library participates in the witness computation.
 """
 
 from __future__ import annotations

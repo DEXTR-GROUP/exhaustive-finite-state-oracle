@@ -1,0 +1,13 @@
+{
+  "schema_version": "EFSO-WITNESS-MANIFEST-1",
+  "reference_id": "QWENRNS-R5-BATCH",
+  "status": "PINNED",
+  "source_repository": "DEXTR-GROUP/QWENRNS",
+  "source_path": "validation/r5_mlp_batch_oracle.py",
+  "source_commit": "4db6a1d314a1d0becb63995927feb90f301eb20e",
+  "source_blob_sha": "901125629523f473a597c9eeebdb8b6cb26a41d7",
+  "snapshot_path": "validation/witnesses/r5_mlp_batch_oracle.py",
+  "execution_mode": "external-origin-pinned-snapshot",
+  "runtime_dependency_on_source_repository": false,
+  "qualification_rule": "The snapshot must reproduce the declared source Git blob exactly before numerical qualification can run."
+}

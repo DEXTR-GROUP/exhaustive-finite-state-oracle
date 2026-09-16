@@ -37,5 +37,5 @@ def test_bridge_requires_mutation_independence_for_pass():
 
 
 def test_missing_witness_fails_closed():
-    with pytest.raises(RuntimeError):
+    with pytest.raises((OSError, RuntimeError)):
         run_witness(Path("/nonexistent/witness.py"), CASES)

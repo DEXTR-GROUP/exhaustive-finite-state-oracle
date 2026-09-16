@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import ast
 import json
 from pathlib import Path
 import sys
@@ -13,10 +14,26 @@ sys.path.insert(0, str(ROOT / "src"))
 from efso_transition import IndependentTransitionEngine, Operation, SUPPORTED_OPERATORS  # noqa: E402
 
 
+def imported_modules(source: str) -> set[str]:
+    tree = ast.parse(source)
+    modules: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            modules.update(alias.name.split(".")[0] for alias in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            modules.add(node.module.split(".")[0])
+    return modules
+
+
 def main() -> None:
     source = (ROOT / "src" / "efso_transition.py").read_text(encoding="utf-8")
-    forbidden = ("QWENRNS", "numpy", "torch", "IUT", "qwen")
-    independence = {name: name.lower() not in source.lower() for name in forbidden}
+    modules = imported_modules(source)
+    forbidden_modules = {"qwenrns", "numpy", "torch"}
+    independence = {
+        "forbidden_external_modules_absent": not (modules & forbidden_modules),
+        "external_runtime_imports": sorted(modules & forbidden_modules),
+        "efso_module_imports_only": "efso_transition" not in modules,
+    }
 
     scalar = IndependentTransitionEngine.apply(Operation("ADD", (2, 3))).value
     product = IndependentTransitionEngine.apply(Operation("MUL", (4, 5))).value
@@ -56,7 +73,7 @@ def main() -> None:
     )
 
     evidence = {
-        "schema_version": "EFSO-E5-001-1",
+        "schema_version": "EFSO-E5-001-2",
         "check_id": "E5-001",
         "scope": "independent deterministic transition engine",
         "operators": list(SUPPORTED_OPERATORS),

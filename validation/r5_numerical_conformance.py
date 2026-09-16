@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import subprocess
 import sys
 from hashlib import sha256, sha1
@@ -118,7 +119,7 @@ def main() -> None:
         "witness_mode": "external-origin-pinned-snapshot",
         "runtime_external_repository_access": False,
         "qualification": "PASS" if mismatch_count == 0 else "FAIL",
-        "source_commit": "GITHUB_SHA_UNKNOWN_AT_LOCAL_RUN",
+        "source_commit": os.environ.get("GITHUB_SHA", "UNKNOWN"),
     }
 
     output = ROOT / "evidence" / "r5_numerical_conformance.json"

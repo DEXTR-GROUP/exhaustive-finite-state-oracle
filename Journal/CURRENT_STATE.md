@@ -1,6 +1,6 @@
 # EFSO — ТЕКУЩЕЕ СОСТОЯНИЕ
 
-**Идентификатор:** EFSO-STATE-008  
+**Идентификатор:** EFSO-STATE-009  
 **Статус:** В РАБОТЕ
 
 ## 1. Рабочая граница
@@ -18,17 +18,18 @@ FM0–FM3 structural baseline, E4 exhaustive enumerator, R4 numerical qualificat
 - `R4-NUM-001 = PASS`;
 - R4 exhaustive numerical contour: `59049` состояний, `59049` external outputs, `mismatch_count = 0`, `max_abs_error = 0.0`;
 - `E5-001 = PASS`;
-- E5 CI run #46: `35045653340`;
-- E5 artifact: `efso-qualification-evidence`, artifact `10426951042`;
-- реализован `src/efso_transition.py`;
-- реализованы 11 независимых операторов: `ADD`, `MUL`, `REDUCE`, `RMSNorm`, `Activation`, `MatMul`, `Softmax`, `RoPE`, `Attention`, `MLP`, `Residual`;
-- independence audit не обнаружил внешних runtime imports;
-- добавлены tests `tests/test_transition.py`;
-- добавлено machine-readable E5 evidence `evidence/e5_001.json` через `validation/e5_001_evidence.py`.
+- реализован `src/efso_transition.py` с 11 независимыми операторами;
+- independence audit E5 не обнаружил внешних runtime imports;
+- реализован `src/efso_conformance.py`;
+- реализован generic state-by-state comparator с cardinality, shape, tolerance, maximum-error и first-counterexample checks;
+- добавлены `tests/test_conformance.py`;
+- добавлен `validation/e6_001_evidence.py`;
+- E6-001 добавлен в CI и выполняется на полном R4 space `3^10 = 59049`.
 
 ## 3. Незавершено
 
-- E6 exhaustive conformance;
+- фактический PASS/FAIL CI для `E6-001`;
+- IUT-specific E6 conformance adapter/case;
 - E7 invariant engine;
 - E8 counterexample engine;
 - E9 conformance matrix;
@@ -38,31 +39,28 @@ FM0–FM3 structural baseline, E4 exhaustive enumerator, R4 numerical qualificat
 - R5/R6/R7 numerical qualification;
 - NumPy float64 qualification.
 
-## 4. Независимость E5
+## 4. Граница E6-001
 
-`src/efso_transition.py` не импортирует IUT, QWENRNS, NumPy или Torch. Внешние references не являются runtime dependencies transition engine.
+`E6-001` квалифицирует общий exhaustive conformance contour на полном R4 конечном пространстве через EFSO evaluator и pinned external-origin witness. Это не IUT-specific claim.
 
-Сложные операции `Attention` и `MLP` реализованы внутри EFSO через собственные primitive semantics.
+IUT-specific conformance требует отдельного конечного пространства, implementation adapter и независимого evidence record.
 
 ## 5. Текущая контрольная точка
 
 ```text
-E6-001 = PLANNED
+E6-001 = RUNNING
 ```
 
-Цель: построить exhaustive conformance engine для полного явно определённого конечного implementation space без исключения состояний.
-
-## 6. Условия E6
+## 6. Условия закрытия E6-001
 
 ```text
-explicit finite implementation space
-exact expected cardinality
-complete enumeration
-EFSO evaluation
-IUT/implementation evaluation
-state-by-state comparison
-reproducible mismatch witness
-machine-readable evidence
+all tests PASS
+59049 states enumerated
+59049 actual results
+59049 expected results
+mismatch_count == 0
+max_abs_error <= 1e-12
+evidence generated
 artifact uploaded
 ```
 
@@ -79,9 +77,9 @@ R4-NUM-001 = PASS
           ↓
 E5 independent transition engine = PASS
           ↓
-E6 exhaustive conformance = PLANNED
+E6 generic exhaustive conformance = RUNNING
           ↓
-R5 → R6 → R7 → NumPy float64
+IUT-specific E6 conformance
           ↓
 E7–E12 proof/evidence contour
 ```

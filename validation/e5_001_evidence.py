@@ -29,9 +29,10 @@ def main() -> None:
     source = (ROOT / "src" / "efso_transition.py").read_text(encoding="utf-8")
     modules = imported_modules(source)
     forbidden_modules = {"qwenrns", "numpy", "torch"}
+    external_runtime_imports = sorted(modules & forbidden_modules)
     independence = {
-        "forbidden_external_modules_absent": not (modules & forbidden_modules),
-        "external_runtime_imports": sorted(modules & forbidden_modules),
+        "forbidden_external_modules_absent": not external_runtime_imports,
+        "external_runtime_imports": external_runtime_imports,
         "efso_module_imports_only": "efso_transition" not in modules,
     }
 
@@ -64,7 +65,10 @@ def main() -> None:
         ) == IndependentTransitionEngine.compose(
             (Operation("ADD", (2, 3)), Operation("MUL", (2, 3)))
         ),
-        "no_external_runtime_dependency": all(independence.values()),
+        "no_external_runtime_dependency": (
+            independence["forbidden_external_modules_absent"]
+            and independence["efso_module_imports_only"]
+        ),
     }
 
     qualification = all(
@@ -73,7 +77,7 @@ def main() -> None:
     )
 
     evidence = {
-        "schema_version": "EFSO-E5-001-2",
+        "schema_version": "EFSO-E5-001-3",
         "check_id": "E5-001",
         "scope": "independent deterministic transition engine",
         "operators": list(SUPPORTED_OPERATORS),

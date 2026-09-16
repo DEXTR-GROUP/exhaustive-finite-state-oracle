@@ -9,7 +9,7 @@ from typing import Any, Callable, Iterable, Sequence
 
 @dataclass(frozen=True)
 class Counterexample:
-    """Minimal reproducible witness for one failed finite-state check."""
+    """Reproducible witness for one failed finite-state check."""
 
     index: int
     state_id: str
@@ -28,7 +28,7 @@ def first_failure(
     *,
     state_id: Callable[[Any], str] | None = None,
 ) -> Counterexample | None:
-    """Return the first reproducible failure in deterministic enumeration order."""
+    """Return the first failure in deterministic enumeration order."""
     identify = state_id or (lambda state: str(getattr(state, "id")()))
     limit = min(len(states), len(actual), len(expected))
     for index in range(limit):
@@ -64,13 +64,14 @@ def minimize_counterexample(
     fails: Callable[[Any], bool],
     shrink: Callable[[Any], Iterable[Any]],
     *,
+    observe: Callable[[Any], tuple[Any, Any, str, float | None]] | None = None,
     state_id: Callable[[Any], str] | None = None,
 ) -> Counterexample:
-    """Deterministically shrink a witness while the failure remains true.
+    """Deterministically shrink a witness while preserving its failure.
 
-    Candidates are tested in the exact order returned by ``shrink``. The first
-    failing candidate is accepted and shrinking continues until no candidate
-    preserves the failure. No random search or external oracle is used.
+    ``shrink`` defines the candidate order. If ``observe`` is supplied, the
+    actual/expected values in the returned witness are recomputed for every
+    accepted candidate, so the final witness is internally state-consistent.
     """
     identify = state_id or (lambda state: str(getattr(state, "id")()))
     current = witness
@@ -78,18 +79,26 @@ def minimize_counterexample(
     while changed:
         changed = False
         for candidate in shrink(current.state):
-            if candidate == current.state:
+            if candidate == current.state or not fails(candidate):
                 continue
-            if fails(candidate):
-                current = Counterexample(
-                    index=current.index,
-                    state_id=identify(candidate),
-                    state=candidate,
-                    actual=current.actual,
-                    expected=current.expected,
-                    reason=current.reason,
-                    max_abs_error=current.max_abs_error,
+            if observe is None:
+                actual, expected, reason, error = (
+                    current.actual,
+                    current.expected,
+                    current.reason,
+                    current.max_abs_error,
                 )
-                changed = True
-                break
+            else:
+                actual, expected, reason, error = observe(candidate)
+            current = Counterexample(
+                index=current.index,
+                state_id=identify(candidate),
+                state=candidate,
+                actual=actual,
+                expected=expected,
+                reason=reason,
+                max_abs_error=error,
+            )
+            changed = True
+            break
     return current

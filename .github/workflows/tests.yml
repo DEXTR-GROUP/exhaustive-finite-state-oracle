@@ -16,3 +16,11 @@ jobs:
           python-version: "3.11"
       - run: python -m pip install pytest
       - run: python -m pytest -q
+      - name: Generate E4-001 evidence
+        run: python validation/e4_001_evidence.py
+      - name: Upload E4-001 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: efso-e4-001-evidence
+          path: evidence/e4_001.json
+          if-no-files-found: error

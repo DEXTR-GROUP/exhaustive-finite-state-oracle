@@ -1,0 +1,11 @@
+{
+  "schema_version": "EFSO-R4-REFERENCE-CONTRACT-1",
+  "reference_id": "QWENRNS-R4",
+  "source": "DEXTR-GROUP/QWENRNS/validation/r4_attention_oracle.py",
+  "primitive": "scaled-dot-product attention with one query and two key/value rows",
+  "query_shape": [2],
+  "key_shape": [2, 2],
+  "value_shape": [2, 2],
+  "scalar_parameter_count": 10,
+  "finite_domain": [-1, 0, 1]
+}

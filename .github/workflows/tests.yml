@@ -26,6 +26,8 @@ jobs:
         run: python validation/e5_001_evidence.py
       - name: Run E6-001 exhaustive conformance
         run: python validation/e6_001_evidence.py
+      - name: Run E7-001 exhaustive invariant qualification
+        run: python validation/e7_001_evidence.py
       - name: Upload EFSO qualification evidence
         uses: actions/upload-artifact@v4
         with:

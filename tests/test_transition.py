@@ -39,7 +39,8 @@ def test_softmax_is_normalized_and_shift_stable():
 def test_rmsnorm_has_expected_rms():
     result = rms_norm((3.0, 4.0), epsilon=1e-5)
     rms = (sum(v * v for v in result) / len(result)) ** 0.5
-    assert abs(rms - (5.0 / ((25.0 / 2.0 + 1e-5) ** 0.5) / 2.0**0.5)) <= 1e-12
+    expected_rms = (12.5 / (12.5 + 1e-5)) ** 0.5
+    assert abs(rms - expected_rms) <= 1e-12
 
 
 def test_attention_and_mlp_are_compositions_of_owned_semantics():
@@ -47,8 +48,9 @@ def test_attention_and_mlp_are_compositions_of_owned_semantics():
     key = ((1.0, 0.0), (0.0, 1.0))
     value = ((2.0, 0.0), (0.0, 4.0))
     out = attention(query, key, value)
-    assert len(out) == 2
-    assert abs(sum(out) - (2.0 + 4.0) / (1.0 + 2.718281828459045)) <= 1e-12
+    e = 2.718281828459045
+    expected = (2.0 * e / (1.0 + e), 4.0 / (1.0 + e))
+    assert max(abs(a - b) for a, b in zip(out, expected)) <= 1e-12
 
     x = (1.0, -1.0)
     up = ((1.0, 0.0), (0.0, 1.0))

@@ -27,10 +27,12 @@ class CoverageRow:
     @property
     def qualified(self) -> bool:
         return (
-            self.enumerated
+            self.qualification_type in {"structural", "numerical"}
+            and self.enumerated
             and self.unique
             and self.missing == 0
             and self.duplicates == 0
+            and self.passed + self.failed == self.expected_count
             and self.passed == self.expected_count
             and self.failed == 0
             and self.expected_count == self.cardinality
@@ -58,12 +60,13 @@ def validate_matrix(rows: Iterable[CoverageRow]) -> MatrixReport:
     materialized = tuple(rows)
     space_keys = tuple((row.space_id, row.operator, row.reference_id) for row in materialized)
     duplicate_count = len(space_keys) - len(set(space_keys))
+    ordered_keys = tuple(sorted(space_keys))
 
     structural_rows = sum(row.qualification_type == "structural" for row in materialized)
     numerical_rows = sum(row.qualification_type == "numerical" for row in materialized)
     qualified_rows = sum(row.qualified for row in materialized)
     failed_rows = len(materialized) - qualified_rows
-    deterministic = tuple(asdict(row) for row in materialized) == tuple(asdict(row) for row in materialized)
+    deterministic = space_keys == ordered_keys
 
     qualification = (
         "PASS"

@@ -1,12 +1,10 @@
-import importlib.util
+import sys
 from pathlib import Path
 
+
 ROOT = Path(__file__).resolve().parents[1]
-MODULE_PATH = ROOT / "src" / "efso_r4_qualification.py"
-spec = importlib.util.spec_from_file_location("efso_r4_qualification", MODULE_PATH)
-module = importlib.util.module_from_spec(spec)
-assert spec.loader is not None
-spec.loader.exec_module(module)
+sys.path.insert(0, str(ROOT / "src"))
+import efso_r4_qualification as module
 
 
 def test_r4_space_cardinality_and_uniqueness():

@@ -34,6 +34,8 @@ jobs:
         run: python validation/e9_001_evidence.py
       - name: Run E10-001 adversarial finite-space qualification
         run: python validation/e10_001_evidence.py
+      - name: Run E11-001 external witness bridge qualification
+        run: python validation/e11_001_evidence.py
       - name: Upload EFSO qualification evidence
         uses: actions/upload-artifact@v4
         with:

@@ -16,7 +16,7 @@
 | E9-001 | Machine-readable conformance coverage matrix | PASS |
 | E10-001 | Adversarial finite-space qualification | PASS |
 | E11-001 | External witness qualification bridge and mutation-independence boundary | PASS |
-| E12-001 | Reproducible verification harness | RUNNING |
+| E12-001 | Reproducible verification harness | PASS |
 
 ## Правила реестра
 
@@ -39,8 +39,8 @@ RUNNING
 
 ## Последнее состояние
 
-`FM0-FM3-001`, `FM2-R4-001`, `E4-001`, `FM2-R4-002`, `R4-NUM-001`, `E5-001`, `E6-001`, `E7-001`, `E8-001`, `E9-001`, `E10-001` и `E11-001` подтверждены в пределах своих заявленных scopes. `R4-NUM-001` закрывает полный numerical contour из `59049` состояний без mismatches. `E5-001` закрывает собственный independent transition engine. `E6-001` закрывает generic exhaustive conformance contour на полном R4 finite space. `E7-001` закрывает independent invariant engine на полном R4 finite space. `E8-001` закрывает deterministic extraction и minimization воспроизводимого counterexample. `E9-001` закрывает coverage matrix. `E10-001` закрывает adversarial finite-space qualification. `E11-001` закрывает изоляцию external witness bridge по фактическому CI evidence.
+Все проверки `FM0-FM3-001` – `E12-001` в текущем квалификационном контуре подтверждены в пределах своих заявленных scopes. `R4-NUM-001` закрывает полный numerical contour из `59049` состояний без mismatches. `E11-001` закрывает изоляцию external witness bridge по фактическому CI evidence. `E12-001` закрывает воспроизводимость полного набора из десяти qualification commands: два последовательных прогона дали одинаковые return codes, stdout/stderr digests и канонический evidence digest.
 
-`E12-001` является текущей контрольной точкой. R5/R6/R7 numerical conformance и NumPy float64 ещё не закрыты.
+`R5/R6/R7` numerical conformance и NumPy float64 ещё не закрыты.
 
 Новые проверки добавляются только после определения вопроса, конечного пространства и критерия завершения.

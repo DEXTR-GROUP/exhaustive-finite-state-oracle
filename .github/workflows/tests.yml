@@ -11,6 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: DEXTR-GROUP/QWENRNS
+          path: _witness/QWENRNS
+          fetch-depth: 1
+          sparse-checkout: |
+            validation/r4_attention_batch_oracle.py
+            validation/r5_mlp_batch_oracle.py
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -21,6 +30,8 @@ jobs:
       - name: Generate FM2-R4-002 evidence
         run: python validation/fm2_r4_002_evidence.py
       - name: Run exhaustive R4 numerical conformance
+        env:
+          QWENRNS_ROOT: ${{ github.workspace }}/_witness/QWENRNS
         run: python validation/r4_numerical_conformance.py
       - name: Generate E5-001 evidence
         run: python validation/e5_001_evidence.py
@@ -38,6 +49,12 @@ jobs:
         run: python validation/e11_001_evidence.py
       - name: Run E12-001 reproducible verification harness
         run: python validation/e12_001_evidence.py
+      - name: Generate FM2-R5-001 evidence
+        run: python validation/fm2_r5_001_evidence.py
+      - name: Run exhaustive R5 numerical conformance
+        env:
+          QWENRNS_ROOT: ${{ github.workspace }}/_witness/QWENRNS
+        run: python validation/r5_numerical_conformance.py
       - name: Upload EFSO qualification evidence
         uses: actions/upload-artifact@v4
         with:
